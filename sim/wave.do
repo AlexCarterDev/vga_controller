@@ -8,9 +8,9 @@ add wave -noupdate -expand -group {vga user } -radix hexadecimal /tb/color
 add wave -noupdate -expand -group {vga user } /tb/screenend
 add wave -noupdate -expand -group {vga out} /tb/vsync
 add wave -noupdate -expand -group {vga out} /tb/hsync
-add wave -noupdate -expand -group {vga out} /tb/red
-add wave -noupdate -expand -group {vga out} /tb/green
-add wave -noupdate -expand -group {vga out} /tb/blue
+add wave -noupdate -expand -group {vga out} -radix hexadecimal /tb/red
+add wave -noupdate -expand -group {vga out} -radix hexadecimal /tb/green
+add wave -noupdate -expand -group {vga out} -radix hexadecimal /tb/blue
 add wave -noupdate -expand -group hsync /tb/vga/hs/hsync
 add wave -noupdate -expand -group hsync /tb/vga/hs/new_line
 add wave -noupdate -expand -group hsync /tb/vga/hs/visible_pre
@@ -20,7 +20,7 @@ add wave -noupdate -expand -group vsync /tb/vga/vs/new_line
 add wave -noupdate -expand -group vsync /tb/vga/vs/vsync
 add wave -noupdate -expand -group vsync /tb/vga/vs/visible
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {4375000 ps} 0}
+WaveRestoreCursors {{Cursor 1} {2710433 ps} 0}
 configure wave -namecolwidth 252
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -35,4 +35,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {10500 ns}
+WaveRestoreZoom {2720079 ps} {4253740 ps}

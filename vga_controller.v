@@ -29,21 +29,19 @@ hsync, vsync, red, green, blue
 	parameter V_BACK = 29;
 	localparam V_FRAME = V_VISIBLE + V_FRONT + V_SYNC + V_BACK;
 
-	parameter SHIFT_ACTIVE = 4;
+	parameter PRE_ACTIVE = 1; // min 1
 
-	localparam H_VISIBLE_PRE = 3;
-	
 	wire new_line;
 	wire h_visible_pre;
 	wire v_visible;
 
-	vga_hsync #(H_VISIBLE, H_FRONT, H_SYNC, H_BACK, H_LINE, H_VISIBLE_PRE) 
+	vga_hsync #(H_VISIBLE, H_FRONT, H_SYNC, H_BACK, H_LINE, PRE_ACTIVE) 
 		hs (clk, hsync, new_line, h_visible_pre);
 	
 	vga_vsync #(V_VISIBLE, V_FRONT, V_SYNC, V_BACK, V_FRAME)
 		vs (clk, vsync, new_line, v_visible);
 
-	vga_active #()
+	vga_active #(H_VISIBLE, V_VISIBLE, PRE_ACTIVE)
 		va (clk, vsync, h_visible_pre, v_visible, color_in,
 			screenend, active, active_x, active_y, red, green, blue);
 	
@@ -163,9 +161,11 @@ screenend, active, active_x, active_y, red, green, blue
 	
 	parameter WIDTH = 1024;
 	parameter HEIGHT = 768;
+	parameter COLOR_GAP = 0; 
 	
 	reg [9:0] x = 0;
 	reg [9:0] y = 0;
+	reg [9:0] active_fifo = 0;
 	
 	assign active = h_visible & v_visible;
 	assign active_x = x;
@@ -182,10 +182,10 @@ screenend, active, active_x, active_y, red, green, blue
 			x <= 0;
 			y <= 0;
 		end else if (active) begin
-			if (x < WIDTH) begin
+			if (x < (WIDTH - 1)) begin
 				x <= x + 1'b1;
 			end else begin
-				if (y < HEIGHT) begin
+				if (y < (HEIGHT - 1)) begin
 					x <= 0;
 					y <= y + 1;
 				end else begin
@@ -193,6 +193,19 @@ screenend, active, active_x, active_y, red, green, blue
 					x <= 0;
 				end 
 			end 
+		end 
+	end 
+	
+	always @(posedge clk) begin
+		active_fifo = (active_fifo << 1) | active;
+		if (active_fifo[(COLOR_GAP - 1)]) begin
+			red <= color[23:16];
+			green <= color[15:8];
+			blue <= color[7:0];
+		end else begin
+			red <= 0;
+			green <= 0;
+			blue <= 0;
 		end 
 	end 
 endmodule
