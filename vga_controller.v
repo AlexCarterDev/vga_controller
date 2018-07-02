@@ -31,10 +31,13 @@ hsync, vsync, red, green, blue
 
 	parameter SHIFT_ACTIVE = 4;
 
+	localparam H_PRE = 0;
+	
 	wire new_line;
+	wire h_visible_pre;
 
-	vga_hsync #(H_VISIBLE, H_FRONT, H_SYNC, H_BACK, H_LINE) 
-		hs (clk, hsync, new_line);
+	vga_hsync #(H_VISIBLE, H_FRONT, H_SYNC, H_BACK, H_LINE, H_PRE) 
+		hs (clk, hsync, new_line, h_visible_pre);
 	
 	vga_vsync #(V_VISIBLE, V_FRONT, V_SYNC, V_BACK, V_FRAME)
 		vs (clk, vsync, new_line);
@@ -44,16 +47,21 @@ hsync, vsync, red, green, blue
 	
 endmodule
 
-module vga_hsync (clk, hsync, new_line);
+module vga_hsync (clk, hsync, new_line, visible_pre);
 	input clk;
 	output reg hsync = 0;
 	output reg new_line = 0;
+	output reg visible_pre = 0;
 	
-	parameter H_VISIBLE = 1024;
-	parameter H_FRONT = 24;
-	parameter H_SYNC = 136;
-	parameter H_BACK = 160;
+	parameter H_VISIBLE = 1024;	// 20
+	parameter H_FRONT = 24; // 3
+	parameter H_SYNC = 136; // 4
+	parameter H_BACK = 160; // 5
 	parameter H_LINE = 1344;
+	parameter VISIBLE_PRE_COUNT = 0;
+	
+	localparam VISIBLE_PRE_FROM = H_SYNC + H_BACK - VISIBLE_PRE_COUNT;
+	localparam VISIBLE_PRE_TO = VISIBLE_PRE_FROM + H_VISIBLE;
 	
 	reg [10:0] count = 0;
 
@@ -80,6 +88,14 @@ module vga_hsync (clk, hsync, new_line);
 		  hsync <= 1;
 		end
 	end
+	
+	always @(posedge clk) begin
+		if ((count >= VISIBLE_PRE_FROM) & (count < VISIBLE_PRE_TO)) begin
+			visible_pre <= 1;
+		end else begin
+			visible_pre <= 0;
+		end 
+	end 
 endmodule
 
 module vga_vsync (clk, vsync, new_line);	

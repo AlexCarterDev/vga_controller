@@ -13,13 +13,13 @@ add wave -noupdate -expand -group {vga out} /tb/green
 add wave -noupdate -expand -group {vga out} /tb/blue
 add wave -noupdate -expand -group hsync /tb/vga/hs/hsync
 add wave -noupdate -expand -group hsync /tb/vga/hs/new_line
+add wave -noupdate -expand -group hsync /tb/vga/hs/visible_pre
 add wave -noupdate -expand -group hsync -radix unsigned /tb/vga/hs/count
 add wave -noupdate -expand -group vsync -radix unsigned /tb/vga/vs/count
 add wave -noupdate -expand -group vsync /tb/vga/vs/new_line
-add wave -noupdate -expand -group vsync /tb/vga/vs/screenend
 add wave -noupdate -expand -group vsync /tb/vga/vs/vsync
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {337598 ps} 0}
+WaveRestoreCursors {{Cursor 1} {1212598 ps} 0}
 configure wave -namecolwidth 252
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
