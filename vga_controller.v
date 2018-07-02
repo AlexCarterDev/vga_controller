@@ -7,7 +7,7 @@ hsync, vsync, red, green, blue
 	input clk;
 	input [23:0] color_in;
 
-	output reg screenend = 0;
+	output screenend;
 	output reg active = 0;
 	output reg [9:0] active_x = 0;
 	output reg [9:0] active_y = 0;
@@ -38,6 +38,9 @@ hsync, vsync, red, green, blue
 	
 	vga_vsync #(V_VISIBLE, V_FRONT, V_SYNC, V_BACK, V_FRAME)
 		vs (clk, vsync, new_line);
+		
+	vga_active #()
+		va (clk, vsync, screenend);
 	
 endmodule
 
@@ -107,6 +110,19 @@ module vga_vsync (clk, vsync, new_line);
 			vsync <= 1;
 		end
 	end
-	 
 endmodule 
 
+module vga_active(clk, vsync, screenend);
+	input clk;
+	input vsync;
+	
+	output reg screenend = 0;
+	
+	reg [1:0] sh_vsync = 0;
+	always @(posedge clk) begin
+		sh_vsync <= {sh_vsync[0], vsync};
+		screenend <= sh_vsync == 2'b10;
+	end
+	
+	
+endmodule

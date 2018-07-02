@@ -17,6 +17,7 @@ wire [7:0] red;
 wire [7:0] green;
 wire [7:0] blue;
 
+
 vga_controller #(20,1,2,3, 10,1,2,3, 4) 
 vga (
 	.clk(clk),
@@ -33,7 +34,7 @@ vga (
 );
 
 initial begin
-	
+	color = 24'hffffff;
 end
 
 always begin

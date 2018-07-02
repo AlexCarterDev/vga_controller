@@ -1,11 +1,11 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /tb/clk
-add wave -noupdate -group {vga user } -radix unsigned /tb/active
-add wave -noupdate -group {vga user } -radix unsigned /tb/active_x
-add wave -noupdate -group {vga user } -radix unsigned /tb/active_y
-add wave -noupdate -group {vga user } -radix hexadecimal /tb/color
-add wave -noupdate -group {vga user } /tb/screenend
+add wave -noupdate -expand -group {vga user } -radix unsigned /tb/active
+add wave -noupdate -expand -group {vga user } -radix unsigned /tb/active_x
+add wave -noupdate -expand -group {vga user } -radix unsigned /tb/active_y
+add wave -noupdate -expand -group {vga user } -radix hexadecimal /tb/color
+add wave -noupdate -expand -group {vga user } /tb/screenend
 add wave -noupdate -expand -group {vga out} /tb/vsync
 add wave -noupdate -expand -group {vga out} /tb/hsync
 add wave -noupdate -expand -group {vga out} /tb/red
@@ -14,8 +14,12 @@ add wave -noupdate -expand -group {vga out} /tb/blue
 add wave -noupdate -expand -group hsync /tb/vga/hs/hsync
 add wave -noupdate -expand -group hsync /tb/vga/hs/new_line
 add wave -noupdate -expand -group hsync -radix unsigned /tb/vga/hs/count
+add wave -noupdate -expand -group vsync -radix unsigned /tb/vga/vs/count
+add wave -noupdate -expand -group vsync /tb/vga/vs/new_line
+add wave -noupdate -expand -group vsync /tb/vga/vs/screenend
+add wave -noupdate -expand -group vsync /tb/vga/vs/vsync
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {185000 ps} 0}
+WaveRestoreCursors {{Cursor 1} {337598 ps} 0}
 configure wave -namecolwidth 252
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -30,4 +34,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {735 ns}
+WaveRestoreZoom {0 ps} {10500 ns}
