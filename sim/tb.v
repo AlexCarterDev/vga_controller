@@ -11,14 +11,25 @@ wire active;
 wire [9:0] active_x;
 wire [9:0] active_y;
 
-vga_controller #(20,1,2,3, 30,1,2,3, 4) 
+wire hsync;
+wire vsync;
+wire [7:0] red;
+wire [7:0] green;
+wire [7:0] blue;
+
+vga_controller #(20,1,2,3,26, 30,1,2,3,36, 4) 
 vga (
-	.clk65(clk),
+	.clk(clk),
 	.color_in(color),
 	.screenend(screenend),
 	.active(active),
 	.active_x(active_x),
-	.active_y(active_y)
+	.active_y(active_y),
+	.hsync(hsync),
+	.vsync(vsync),
+	.red(red),
+	.green(green),
+	.blue(blue)
 );
 
 initial begin

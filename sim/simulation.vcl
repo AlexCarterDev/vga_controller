@@ -7,6 +7,7 @@ vlib rtl_work
 vmap work rtl_work
 
 vlog ../vga_controller.v
+
 vlog tb.v
 
 vsim tb
@@ -14,4 +15,4 @@ vsim tb
 do wave.do
 view structure
 view signals
-run 0.6us
+run .7us
