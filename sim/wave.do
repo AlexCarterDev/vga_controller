@@ -18,8 +18,9 @@ add wave -noupdate -expand -group hsync -radix unsigned /tb/vga/hs/count
 add wave -noupdate -expand -group vsync -radix unsigned /tb/vga/vs/count
 add wave -noupdate -expand -group vsync /tb/vga/vs/new_line
 add wave -noupdate -expand -group vsync /tb/vga/vs/vsync
+add wave -noupdate -expand -group vsync /tb/vga/vs/visible
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1212598 ps} 0}
+WaveRestoreCursors {{Cursor 1} {4375000 ps} 0}
 configure wave -namecolwidth 252
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
