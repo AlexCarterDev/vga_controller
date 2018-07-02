@@ -17,7 +17,7 @@ wire [7:0] red;
 wire [7:0] green;
 wire [7:0] blue;
 
-
+// vga_controller #(1024,24,136,160, 768,3,6,29, 2) 
 vga_controller #(20,3,4,5, 10,3,4,5, 2) 
 vga (
 	.clk(clk),
