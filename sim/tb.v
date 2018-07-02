@@ -17,7 +17,7 @@ wire [7:0] red;
 wire [7:0] green;
 wire [7:0] blue;
 
-vga_controller #(20,1,2,3,26, 30,1,2,3,36, 4) 
+vga_controller #(20,1,2,3, 10,1,2,3, 4) 
 vga (
 	.clk(clk),
 	.color_in(color),
