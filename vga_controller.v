@@ -8,9 +8,9 @@ hsync, vsync, red, green, blue
 	input [23:0] color_in;
 
 	output screenend;
-	output reg active = 0;
-	output reg [9:0] active_x = 0;
-	output reg [9:0] active_y = 0;
+	output active;
+	output [9:0] active_x;
+	output [9:0] active_y;
 	output hsync;
 	output vsync;
 	output [7:0] red;
@@ -31,20 +31,21 @@ hsync, vsync, red, green, blue
 
 	parameter SHIFT_ACTIVE = 4;
 
-	localparam H_PRE = 0;
+	localparam H_VISIBLE_PRE = 3;
 	
 	wire new_line;
 	wire h_visible_pre;
 	wire v_visible;
 
-	vga_hsync #(H_VISIBLE, H_FRONT, H_SYNC, H_BACK, H_LINE, H_PRE) 
+	vga_hsync #(H_VISIBLE, H_FRONT, H_SYNC, H_BACK, H_LINE, H_VISIBLE_PRE) 
 		hs (clk, hsync, new_line, h_visible_pre);
 	
 	vga_vsync #(V_VISIBLE, V_FRONT, V_SYNC, V_BACK, V_FRAME)
 		vs (clk, vsync, new_line, v_visible);
-		
+
 	vga_active #()
-		va (clk, vsync, screenend);
+		va (clk, vsync, h_visible_pre, v_visible, color_in,
+			screenend, active, active_x, active_y, red, green, blue);
 	
 endmodule
 
@@ -141,11 +142,34 @@ module vga_vsync (clk, vsync, new_line, visible);
 	end 
 endmodule 
 
-module vga_active(clk, vsync, screenend);
+module vga_active(
+clk, 
+vsync, h_visible, v_visible, color,
+screenend, active, active_x, active_y, red, green, blue
+);
 	input clk;
 	input vsync;
+	input h_visible;
+	input v_visible;
+	input [23:0] color;
 	
 	output reg screenend = 0;
+	output active;
+	output [9:0] active_x;
+	output [9:0] active_y;
+	output reg [7:0] red = 0;
+	output reg [7:0] green = 0;
+	output reg [7:0] blue = 0;
+	
+	parameter WIDTH = 1024;
+	parameter HEIGHT = 768;
+	
+	reg [9:0] x = 0;
+	reg [9:0] y = 0;
+	
+	assign active = h_visible & v_visible;
+	assign active_x = x;
+	assign active_y = y;
 	
 	reg [1:0] sh_vsync = 0;
 	always @(posedge clk) begin
@@ -153,5 +177,22 @@ module vga_active(clk, vsync, screenend);
 		screenend <= sh_vsync == 2'b10;
 	end
 	
-	
+	always @(posedge clk) begin
+		if (screenend) begin
+			x <= 0;
+			y <= 0;
+		end else if (active) begin
+			if (x < WIDTH) begin
+				x <= x + 1'b1;
+			end else begin
+				if (y < HEIGHT) begin
+					x <= 0;
+					y <= y + 1;
+				end else begin
+					y <= 0;
+					x <= 0;
+				end 
+			end 
+		end 
+	end 
 endmodule

@@ -15,4 +15,4 @@ vsim tb
 do wave.do
 view structure
 view signals
-run 10us
+run 14us
