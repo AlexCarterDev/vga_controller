@@ -67,7 +67,7 @@ module vga_hsync (clk, hsync, new_line, visible_pre);
 
 	always @(posedge clk) begin
 		if (count < (H_LINE - 1)) begin
-			count <= count + 1;
+			count <= count + 1'b1;
 		end else begin
 			count <= 0;
 		end
@@ -117,7 +117,7 @@ module vga_vsync (clk, vsync, new_line, visible);
 	
 	always @(posedge new_line) begin
 		if (count < (V_FRAME - 1)) begin
-			count <= count + 1;
+			count <= count + 1'b1;
 		end else begin 
 			count <= 0;
 		end 
@@ -163,13 +163,13 @@ screenend, active, active_x, active_y, red, green, blue
 	parameter HEIGHT = 768;
 	parameter COLOR_GAP = 0; 
 	
-	reg [9:0] x = 0;
-	reg [9:0] y = 0;
+	reg [10:0] x = 0;
+	reg [10:0] y = 0;
 	reg [9:0] active_fifo = 0;
 	
 	assign active = h_visible & v_visible;
-	assign active_x = x;
-	assign active_y = y;
+	assign active_x = x[9:0];
+	assign active_y = y[9:0];
 	
 	reg [1:0] sh_vsync = 0;
 	always @(posedge clk) begin
@@ -187,7 +187,7 @@ screenend, active, active_x, active_y, red, green, blue
 			end else begin
 				if (y < (HEIGHT - 1)) begin
 					x <= 0;
-					y <= y + 1;
+					y <= y + 1'b1;
 				end else begin
 					y <= 0;
 					x <= 0;
